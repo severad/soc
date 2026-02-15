@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="cs" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOČ 2026 - Postoje k interrupcím</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom scroll behavior offset for fixed header */
+        section {
+            scroll-margin-top: 5rem;
+        }
+        /* Hide scrollbar for clean look but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Selection color */
+        ::selection {
+            background-color: #fecdd3; /* rose-200 */
+            color: #881337; /* rose-900 */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md shadow-sm z-50 border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="scrollToTop()">
+                    <i data-lucide="graduation-cap" class="h-6 w-6 text-rose-600"></i>
+                    <span class="font-bold text-xl text-slate-900">SOČ 2026</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8" id="desktop-menu">
+                    <a href="#uvod" class="nav-link text-rose-600 font-semibold transition-colors duration-200" data-section="uvod">Úvod</a>
+                    <a href="#abstrakt" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="abstrakt">Abstrakt</a>
+                    <a href="#argumenty" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="argumenty">Argumenty</a>
+                    <a href="#metodika" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="metodika">Metodika</a>
+                    <a href="#vysledky" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="vysledky">Výsledky</a>
+                    <a href="#zaver" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="zaver">Závěr</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 p-2">
+                        <i data-lucide="menu" class="h-6 w-6" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#uvod" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Úvod</a>
+                <a href="#abstrakt" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Abstrakt</a>
+                <a href="#argumenty" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Argumenty</a>
+                <a href="#metodika" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Metodika</a>
+                <a href="#vysledky" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Výsledky</a>
+                <a href="#zaver" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Závěr</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="uvod" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto flex flex-col items-center text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100 text-rose-800 text-sm font-semibold mb-8">
+            <i data-lucide="award" class="h-4 w-4"></i>
+            Obor 17: Filozofie, politologie a ostatní humanitní vědy
+        </div>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
+            Postoje veřejnosti k problematice interrupcí
+            <span class="block text-rose-600 mt-2">Analýza názorů v Jihomoravském kraji</span>
+        </h1>
+        <p class="text-xl text-slate-600 max-w-2xl mb-10">
+            Téma interrupce patří mezi zásadní společenské otázky dotýkající se lidských práv, zdravotní péče i osobní svobody. Cílem práce je zmapovat aktuální postoje veřejnosti.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#vysledky" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-rose-600 hover:bg-rose-700 transition-all shadow-lg hover:shadow-xl">
+                Zobrazit výsledky průzkumu
+                <i data-lucide="chevron-right" class="ml-2 h-5 w-5"></i>
+            </a>
+            <button onclick="alert('Zde bude odkaz na vaše PDF soubor.')" class="inline-flex items-center justify-center px-6 py-3 border border-slate-300 text-base font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition-all shadow-sm hover:shadow-md">
+                <i data-lucide="download" class="mr-2 h-5 w-5"></i>
+                Stáhnout PDF
+            </button>
+        </div>
+        
+        <div class="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-4xl text-left">
+            <div class="p-6 bg-white rounded-xl shadow-sm border border-slate-100">
+                <div class="text-sm text-slate-500 font-medium uppercase tracking-wider mb-1">Autor</div>
+                <div class="font-bold text-lg text-slate-900">Jméno Příjmení</div>
+                <div class="text-slate-600">Gymnázium ...</div>
+            </div>
+            <div class="p-6 bg-white rounded-xl shadow-sm border border-slate-100">
+                <div class="text-sm text-slate-500 font-medium uppercase tracking-wider mb-1">Respondenti</div>
+                <div class="font-bold text-lg text-slate-900">152</div>
+                <div class="text-slate-600">Účastníků průzkumu</div>
+            </div>
+            <div class="p-6 bg-white rounded-xl shadow-sm border border-slate-100">
+                <div class="text-sm text-slate-500 font-medium uppercase tracking-wider mb-1">Rok</div>
+                <div class="font-bold text-lg text-slate-900">2026</div>
+                <div class="text-slate-600">48. ročník SOČ</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Abstract Section -->
+    <section id="abstrakt" class="py-20 bg-white border-y border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="p-3 bg-indigo-100 rounded-lg text-indigo-600">
+                    <i data-lucide="book-open" class="h-6 w-6"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-900">Úvod a motivace</h2>
+            </div>
+            <div class="prose prose-lg text-slate-600 text-justify max-w-none leading-relaxed">
+                <p class="mb-4">
+                    Téma interrupce patří mezi zásadní společenské otázky, které se dotýkají lidských práv, zdravotní péče i osobní svobody. Přestože jde o citlivé a často polarizující téma, je důležité o něm vést otevřenou, věcnou a respektující diskusi. Právě informovanost a porozumění jsou klíčem k odpovědnému veřejnému dialogu.
+                </p>
+                <p class="mb-4">
+                    Jedním z hlavních důvodů, proč se tématem interrupce zabývat, je ochrana reprodukčních práv žen. Možnost rozhodovat o vlastním těle patří mezi základní principy moderní demokratické společnosti. Interrupce se často týká žen, které se ocitly v náročné životní situaci – ať už ze zdravotních, sociálních nebo osobních důvodů.
+                </p>
+                <blockquote class="border-l-4 border-rose-500 pl-4 italic my-6 bg-slate-50 p-4 rounded-r-lg">
+                    "Za každým rozhodnutím o interrupci stojí konkrétní životní příběh. Zabývat se tímto tématem znamená podporovat empatii, toleranci a respekt."
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Arguments Section -->
+    <section id="argumenty" class="py-20 bg-slate-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="p-3 bg-purple-100 rounded-lg text-purple-600">
+                    <i data-lucide="scale" class="h-6 w-6"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-900">Argumentační roviny</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Pro-Life -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm border-t-4 border-blue-500">
+                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i data-lucide="heart" class="h-5 w-5 text-blue-500"></i>
+                        Zástupci Pro-life
+                    </h3>
+                    <p class="text-slate-600 mb-4 text-justify">
+                        Odpůrci interrupcí argumentují tím, že člověk je člověkem od početí a že již první oplozená lidská buňka je existující lidský jedinec s právem na život. Člověka definuje od počátku úplný soubor genů, nikoliv tvar a velikost těla.
+                    </p>
+                    <ul class="space-y-2 text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0"></div>
+                            <span>Život začíná početím (koncepcí).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0"></div>
+                            <span>Interrupce je považována za neoprávněné ukončení života.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0"></div>
+                            <span>Apel na lidskou odpovědnost a zákonnou ochranu plodu.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Pro-Choice -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm border-t-4 border-rose-500">
+                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i data-lucide="brain" class="h-5 w-5 text-rose-500"></i>
+                        Zástupci Pro-choice
+                    </h3>
+                    <p class="text-slate-600 mb-4 text-justify">
+                        Hnutí pro-choice prosazuje právo na legální přístup k interrupcím. Zdůrazňují společenský význam možnosti svobodné volby a práva rozhodovat o svém životě a těle. Přinucení ženy přijmout nechtěné těhotenství je vnímáno jako omezení svobody.
+                    </p>
+                    <ul class="space-y-2 text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500 mt-2 flex-shrink-0"></div>
+                            <span>Právo ženy rozhodovat o vlastním těle.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500 mt-2 flex-shrink-0"></div>
+                            <span>Prevence nelegálních a nebezpečných zákroků.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500 mt-2 flex-shrink-0"></div>
+                            <span>Různé názory na to, kdy plod získává status člověka (např. mozková aktivita, životaschopnost).</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology -->
+    <section id="metodika" class="py-20 bg-white border-y border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div class="flex items-center gap-4 mb-8">
+            <div class="p-3 bg-emerald-100 rounded-lg text-emerald-600">
+                <i data-lucide="microscope" class="h-6 w-6"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-slate-900">Metodika výzkumu</h2>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-8 border border-slate-200">
+            <p class="text-slate-700 mb-6 text-lg">
+              Výzkum veřejného mínění byl zaměřen na zjištění postojů obyvatel České republiky, přičemž hlavní pozornost byla věnována respondentům z <strong>Jihomoravského kraje</strong>.
+            </p>
+            <div class="grid sm:grid-cols-3 gap-6">
+              <div class="bg-white p-5 rounded-lg shadow-sm border border-slate-100 text-center">
+                <div class="text-4xl font-bold text-emerald-600 mb-1">152</div>
+                <div class="text-slate-600 font-medium">Respondentů</div>
+              </div>
+              <div class="bg-white p-5 rounded-lg shadow-sm border border-slate-100 text-center">
+                <div class="text-xl font-bold text-emerald-600 mb-1 mt-2">Google Forms</div>
+                <div class="text-slate-600 font-medium">Metoda sběru</div>
+              </div>
+              <div class="bg-white p-5 rounded-lg shadow-sm border border-slate-100 text-center">
+                <div class="text-xl font-bold text-emerald-600 mb-1 mt-2">16-44 let</div>
+                <div class="text-slate-600 font-medium">Převažující věk</div>
+              </div>
+            </div>
+            <p class="text-slate-500 mt-6 text-sm italic">
+              * Dotazník obsahoval převážně uzavřené otázky. Výsledky reflektují především regionální postoje, ale naznačují i obecnější trendy.
+            </p>
+          </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="vysledky" class="py-20 bg-slate-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="p-3 bg-orange-100 rounded-lg text-orange-600">
+                    <i data-lucide="bar-chart-3" class="h-6 w-6"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-900">Výsledky výzkumu</h2>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+            
+                <!-- Chart 1: Znalost pojmu -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 mb-6">Znalost pojmu "Interrupce"</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between text-sm font-medium text-slate-700 mb-1">
+                                <span>Ano, přesně vím (71.1%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-4">
+                                <div class="bg-blue-600 h-4 rounded-full" style="width: 71.1%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm font-medium text-slate-700 mb-1">
+                                <span>Slyšel/a jsem o tom (18.4%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-4">
+                                <div class="bg-blue-400 h-4 rounded-full" style="width: 18.4%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm font-medium text-slate-700 mb-1">
+                                <span>Nevím / Neznám (10.5%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-4">
+                                <div class="bg-slate-400 h-4 rounded-full" style="width: 10.5%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Chart 2: Právo ženy rozhodnout -->
+                 <div class="bg-rose-600 text-white p-8 rounded-2xl shadow-lg flex flex-col justify-center text-center">
+                    <h3 class="text-xl font-medium text-rose-100 mb-4">Měla by žena mít právo rozhodnout?</h3>
+                    <div class="text-6xl font-extrabold mb-4">90.1%</div>
+                    <p class="text-rose-100">
+                        Drtivá většina respondentů souhlasí s tím, aby žena měla právo rozhodnout o přerušení těhotenství.
+                    </p>
+                    <div class="mt-6 flex justify-center gap-4 text-sm font-medium opacity-80">
+                        <span class="bg-white/20 px-3 py-1 rounded-full">5.3% Nesouhlasí</span>
+                        <span class="bg-white/20 px-3 py-1 rounded-full">4.6% Neví</span>
+                    </div>
+                </div>
+
+                <!-- Chart 3: Postoj v krizové situaci -->
+                <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Rozhodnutí v životní krizi</h3>
+                    <p class="text-slate-500 mb-8 text-sm">"Z pohledu ženy procházející finanční či psychickou krizí, rozhodli byste se pro potrat?"</p>
+                    
+                    <div class="h-64 flex items-end justify-around gap-4 md:gap-12 px-2 pb-4 border-b border-slate-200">
+                         <!-- Bar 1 -->
+                         <div class="w-full max-w-[120px] flex flex-col items-center group cursor-pointer">
+                            <div class="mb-2 font-bold text-rose-600 text-lg">54.6%</div>
+                            <div class="w-full bg-rose-500 rounded-t-lg transition-all hover:bg-rose-600 hover:scale-105 duration-300 relative shadow-md" style="height: 54.6%"></div>
+                            <div class="mt-3 text-center text-sm font-medium text-slate-600">Ano, interrupce je řešení</div>
+                         </div>
+                         <!-- Bar 2 -->
+                         <div class="w-full max-w-[120px] flex flex-col items-center group cursor-pointer">
+                            <div class="mb-2 font-bold text-slate-600 text-lg">27.6%</div>
+                            <div class="w-full bg-slate-300 rounded-t-lg transition-all hover:bg-slate-400 hover:scale-105 duration-300 relative" style="height: 27.6%"></div>
+                            <div class="mt-3 text-center text-sm font-medium text-slate-600">Neví / Nerozhodnuto</div>
+                         </div>
+                         <!-- Bar 3 -->
+                         <div class="w-full max-w-[120px] flex flex-col items-center group cursor-pointer">
+                            <div class="mb-2 font-bold text-blue-600 text-lg">17.8%</div>
+                            <div class="w-full bg-blue-500 rounded-t-lg transition-all hover:bg-blue-600 hover:scale-105 duration-300 relative shadow-md" style="height: 17.8%"></div>
+                            <div class="mt-3 text-center text-sm font-medium text-slate-600">Ne, nechat dítě</div>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Chart 4: Co ovlivňuje názor -->
+                <div class="lg:col-span-2 bg-slate-900 text-slate-300 p-8 rounded-2xl shadow-inner">
+                    <h3 class="text-xl font-bold text-white mb-6">Co ovlivňuje názor na interrupce?</h3>
+                    <p class="mb-6 text-sm text-slate-400">Respondenti mohli vybrat více faktorů. Dominují etické důvody.</p>
+                    
+                    <div class="space-y-5">
+                        <!-- Item 1 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">Etické faktory (vnímání života)</span>
+                                <span class="font-bold text-rose-400">88.9%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-rose-500 to-purple-500 h-3 rounded-full" style="width: 88.9%"></div>
+                            </div>
+                        </div>
+                        <!-- Item 2 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">Rodina a přátelé</span>
+                                <span class="font-bold text-rose-400">38.9%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-rose-500 to-purple-500 h-3 rounded-full" style="width: 38.9%"></div>
+                            </div>
+                        </div>
+                         <!-- Item 3 -->
+                         <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">Vzdělání (škola)</span>
+                                <span class="font-bold text-rose-400">33.3%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-rose-500 to-purple-500 h-3 rounded-full" style="width: 33.3%"></div>
+                            </div>
+                        </div>
+                        <!-- Item 4 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">Osobní zkušenost</span>
+                                <span class="font-bold text-rose-400">11.1%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-rose-500 to-purple-500 h-3 rounded-full" style="width: 11.1%"></div>
+                            </div>
+                        </div>
+                         <!-- Item 5 -->
+                         <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-white">Náboženství</span>
+                                <span class="font-bold text-rose-400">11.1%</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-rose-500 to-purple-500 h-3 rounded-full" style="width: 11.1%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section id="zaver" class="py-20 bg-white border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+           <div class="inline-block p-3 bg-rose-100 rounded-full text-rose-600 mb-6">
+             <i data-lucide="target" class="h-8 w-8"></i>
+           </div>
+           <h2 class="text-3xl font-bold text-slate-900 mb-8">Závěr</h2>
+           <p class="text-xl text-slate-600 mb-12 leading-relaxed text-justify">
+             Průzkum ukázal, že v české společnosti, konkrétně mezi respondenty z Jihomoravského kraje, převládá <strong>liberální postoj</strong> k interrupcím. Drtivá většina (přes 90 %) podporuje právo ženy na volbu. Zároveň však respondenti vnímají etickou složitost problému – většina souhlasí s určitým časovým omezením zákroku a jako hlavní faktor formující jejich názor uvádějí etické vnímání lidského života.
+             <br /><br />
+             Výzkum tak přispívá k lepšímu porozumění společenským postojům k reprodukčním právům a potvrzuje, že ačkoliv je téma citlivé, veřejnost preferuje možnost svobodné volby v rámci zákonných mantinelů.
+           </p>
+           
+           <div class="bg-slate-50 p-8 rounded-2xl shadow-sm border border-slate-200 inline-block text-left w-full max-w-2xl">
+             <div class="flex items-center gap-3 mb-6">
+                <i data-lucide="mail" class="h-6 w-6 text-rose-600"></i>
+                <h3 class="text-xl font-bold text-slate-900">Kontakt na autora</h3>
+             </div>
+             <div class="grid sm:grid-cols-2 gap-6">
+               <div>
+                 <div class="text-sm text-slate-500 mb-1">Email</div>
+                 <a href="mailto:student@skola.cz" class="text-rose-600 hover:underline font-medium">vase.jmeno@student.cz</a>
+               </div>
+               <div>
+                 <div class="text-sm text-slate-500 mb-1">Konzultant</div>
+                 <span class="text-slate-800 font-medium">Doplňte jméno konzultanta</span>
+               </div>
+             </div>
+           </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center">
+        <div class="max-w-6xl mx-auto px-4">
+            <p class="mb-4">© 2026 SOČ - Postoje k interrupcím.</p>
+            <p class="text-sm text-slate-600">
+                Tato webová prezentace slouží jako doplněk k obhajobě Středoškolské odborné činnosti. Data byla sbírána v roce 2025/2026.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Mobile Menu Logic
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        let isMenuOpen = false;
+
+        mobileBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                // Could change icon here if desired
+            } else {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        function closeMenu() {
+            isMenuOpen = false;
+            mobileMenu.classList.add('hidden');
+        }
+
+        // Active Scroll Spy Logic
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('text-rose-600', 'font-semibold');
+                link.classList.add('text-slate-600');
+                
+                if (link.getAttribute('data-section') === current) {
+                    link.classList.remove('text-slate-600');
+                    link.classList.add('text-rose-600', 'font-semibold');
+                }
+            });
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
