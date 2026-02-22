@@ -447,26 +447,26 @@
                 <h3 class="text-xl font-bold text-slate-800 mb-6 border-b border-slate-200 pb-2">3. Rozhodování v krizových situacích a vlivy</h3>
                 <div class="grid lg:grid-cols-2 gap-8">
                     <!-- Chart: Postoj v krizové situaci -->
-                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
                         <div>
                             <h4 class="text-lg font-bold text-slate-900 mb-2">Rozhodnutí z pohledu ženy v životní krizi</h4>
                             <p class="text-slate-500 mb-8 text-sm">"Rozhodli byste se pro potrat ve finanční, psychické či jiné krizi?"</p>
                             
                             <div class="h-56 flex items-end justify-around gap-4 px-2 pb-4 border-b border-slate-200 mb-6">
                                 <!-- Bar 1 -->
-                                <div class="w-full max-w-[100px] flex flex-col items-center group cursor-pointer">
+                                <div class="w-full max-w-[120px] flex flex-col items-center group cursor-pointer">
                                     <div class="mb-2 font-bold text-rose-600 text-lg">54.6%</div>
                                     <div class="w-full bg-rose-500 rounded-t-lg transition-all hover:bg-rose-600 relative shadow-md" style="height: 54.6%"></div>
                                     <div class="mt-3 text-center text-xs font-medium text-slate-600">Podstoupit (řešení)</div>
                                 </div>
                                 <!-- Bar 2 -->
-                                <div class="w-full max-w-[100px] flex flex-col items-center group cursor-pointer">
+                                <div class="w-full max-w-[120px] flex flex-col items-center group cursor-pointer">
                                     <div class="mb-2 font-bold text-slate-500 text-lg">27.6%</div>
                                     <div class="w-full bg-slate-300 rounded-t-lg transition-all hover:bg-slate-400 relative" style="height: 27.6%"></div>
                                     <div class="mt-3 text-center text-xs font-medium text-slate-600">Nerozhodnost / Neví</div>
                                 </div>
                                 <!-- Bar 3 -->
-                                <div class="w-full max-w-[100px] flex flex-col items-center group cursor-pointer">
+                                <div class="w-full max-w-[120px] flex flex-col items-center group cursor-pointer">
                                     <div class="mb-2 font-bold text-blue-600 text-lg">17.8%</div>
                                     <div class="w-full bg-blue-500 rounded-t-lg transition-all hover:bg-blue-600 relative shadow-md" style="height: 17.8%"></div>
                                     <div class="mt-3 text-center text-xs font-medium text-slate-600">Nechat dítě navzdory krizi</div>
@@ -478,11 +478,41 @@
                         </p>
                     </div>
 
+                    <!-- Chart: Vliv okolí na názor -->
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xl font-bold text-slate-900 mb-6">Ovlivňuje váš názor na potraty okolí?</h4>
+                            <div class="space-y-6 mb-8">
+                                <div>
+                                    <div class="flex justify-between mb-1 text-sm font-medium text-slate-700">
+                                        <span>Ne, tvořím si vlastní pohled</span>
+                                        <span class="font-bold text-emerald-600">88.8%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-3">
+                                        <div class="bg-emerald-500 h-3 rounded-full" style="width: 88.8%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1 text-sm font-medium text-slate-700">
+                                        <span>Ano, můj názor je ovlivněn okolím</span>
+                                        <span class="font-bold text-rose-500">11.2%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-3">
+                                        <div class="bg-rose-400 h-3 rounded-full" style="width: 11.2%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 text-justify">
+                            Drtivá většina respondentů uvedla, že si udělali svůj vlastní pohled na interrupce a nepodléhají vlivu svého okolí. Názor menšiny (11,2 % respondentů) je naopak něčím ovlivněn, jak je podrobně zobrazeno v grafu vedle.
+                        </p>
+                    </div>
+
                     <!-- Chart: Co ovlivňuje názor -->
                     <div class="bg-slate-900 text-slate-300 p-8 rounded-2xl shadow-inner flex flex-col justify-between">
                         <div>
-                            <h4 class="text-xl font-bold text-white mb-2">Co ovlivňuje váš názor na interrupce?</h4>
-                            <p class="mb-8 text-sm text-slate-400">Tázáni byli ti, kteří uvedli, že jejich názor je ovlivněn okolím. Bylo možné vybrat více možností.</p>
+                            <h4 class="text-xl font-bold text-white mb-2">Co konkrétně váš názor ovlivňuje?</h4>
+                            <p class="mb-8 text-sm text-slate-400">Tázáni byli pouze ti, jejichž názor je ovlivněn (11,2 %). Bylo možné vybrat více možností.</p>
                             
                             <div class="space-y-5 mb-6">
                                 <div>
@@ -508,7 +538,7 @@
                             </div>
                         </div>
                         <p class="text-sm text-slate-400 text-justify">
-                            Jak je vidět, zdaleka nejčastějším faktorem, který formuje pohled respondentů, je jejich vlastní vnímání lidského života a etiky (88,9 %). Menší, přesto významný vliv má sociální bublina (rodina/přátelé) a vzdělání.
+                            Jak je vidět, zdaleka nejčastějším faktorem u této menšiny je jejich vlastní vnímání lidského života a etiky (88,9 %). Menší, přesto významný vliv má sociální bublina (rodina/přátelé) a vzdělání.
                         </p>
                     </div>
                 </div>
@@ -540,8 +570,8 @@
                  <a href="mailto:filip.trtilek@student.cz" class="text-rose-600 hover:underline font-medium">filip.trtilek@student.cz</a>
                </div>
                <div>
-                 <div class="text-sm text-slate-500 mb-1">Konzultant: Mgr. Martin Dojiva</div>
-                 <span class="text-slate-800 font-medium">dojiva@gzastavka.cz</span>
+                 <div class="text-sm text-slate-500 mb-1">Konzultant</div>
+                 <span class="text-slate-800 font-medium">Doplňte jméno konzultanta</span>
                </div>
              </div>
            </div>
