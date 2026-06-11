@@ -1,647 +1,693 @@
 <!DOCTYPE html>
-<html lang="cs" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ústavní limity zákazu potratu - SOČ 2026</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Court Debate - Transparent Society</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* Custom scroll behavior offset for fixed header */
-        section {
-            scroll-margin-top: 5rem;
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --accent-green: #10b981;
         }
-        /* Hide scrollbar for clean look but allow scrolling */
-        .no-scrollbar::-webkit-scrollbar {
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* --- VVIEWS TOGGLE --- */
+        #survey-view, #debate-view {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .hidden-view {
+            display: none !important;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* --- SURVEY VIEW (WARM-UP) --- */
+        #survey-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .survey-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 4rem 3rem;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .question-counter {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--accent-blue);
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .survey-question {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            line-height: 1.4;
+            margin: 3rem 0;
+            color: var(--text-main);
+        }
+
+        .survey-context {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .survey-votes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .vote-box {
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vote-yes {
+            background: rgba(59, 130, 246, 0.1);
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .vote-no {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        .vote-box span {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .survey-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn-large {
+            padding: 1.2rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            background-color: var(--text-main);
+            color: var(--bg-color);
+        }
+
+        .btn-large:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+        }
+
+        .btn-finish {
+            background-color: var(--accent-green);
+            color: white;
             display: none;
         }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+
+        .btn-finish:hover {
+            background-color: #059669;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
         }
-        /* Selection color */
-        ::selection {
-            background-color: #fecdd3; /* rose-200 */
-            color: #881337; /* rose-900 */
+
+        /* --- DEBATE VIEW (TIMER) --- */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            flex-grow: 1;
+        }
+
+        .rules-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .scenario-box {
+            border-left: 5px solid var(--accent-blue);
+        }
+
+        .scenario-box h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: var(--accent-blue);
+        }
+
+        .scenario-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .scenario-tag {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .role-box {
+            background: rgba(0,0,0,0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .role-box h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .role-box p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .teams {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+        }
+
+        .team-a { color: var(--accent-blue); font-weight: bold; font-size: 1.2rem;}
+        .team-b { color: var(--accent-red); font-weight: bold; font-size: 1.2rem;}
+
+        .timer-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        #phase-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            min-height: 2.5rem;
+        }
+
+        #phase-desc {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            min-height: 3rem;
+        }
+
+        #timer {
+            font-size: 6rem;
+            font-weight: 800;
+            font-family: monospace;
+            line-height: 1;
+            margin-bottom: 2rem;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            transition: color 0.3s;
+        }
+
+        .btn-controls {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        button {
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        #nextPhaseBtn {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        #nextPhaseBtn:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        #playPauseBtn {
+            background-color: transparent;
+            border: 2px solid var(--text-muted);
+            color: var(--text-main);
+        }
+
+        #playPauseBtn:hover {
+            border-color: var(--text-main);
+        }
+
+        .phase-list {
+            margin-top: 2rem;
+            width: 100%;
+            text-align: left;
+        }
+
+        .phase-item {
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .phase-item.active {
+            color: var(--text-main);
+            font-weight: bold;
+            border-left: 3px solid var(--accent-blue);
+            padding-left: 0.5rem;
+        }
+
+        .warning-time {
+            color: var(--accent-red) !important;
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.4) !important;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 1024px) {
+            .main-container { grid-template-columns: 1fr; }
+            .timer-section { position: relative; top: 0; }
+            .survey-votes { grid-template-columns: 1fr; gap: 1rem; }
+        }
+        @media (max-width: 768px) {
+            .roles-grid { grid-template-columns: 1fr; }
+            #timer { font-size: 4rem; }
+            .survey-question { font-size: 1.8rem; }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+<body>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md shadow-sm z-50 border-b border-slate-200">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="scrollToTop()">
-                    <i data-lucide="graduation-cap" class="h-6 w-6 text-rose-600"></i>
-                    <span class="font-bold text-xl text-slate-900">SOČ 2026</span>
-                </div>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-8" id="desktop-menu">
-                    <a href="#uvod" class="nav-link text-rose-600 font-semibold transition-colors duration-200" data-section="uvod">Úvod</a>
-                    <a href="#abstrakt" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="abstrakt">Abstrakt</a>
-                    <a href="#obecne" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="obecne">Obecné info</a>
-                    <a href="#pravo" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="pravo">Právní rámec</a>
-                    <a href="#argumenty" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="argumenty">Argumenty</a>
-                    <a href="#metodika" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="metodika">Metodika</a>
-                    <a href="#vysledky" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="vysledky">Výsledky</a>
-                    <a href="#zaver" class="nav-link text-slate-600 hover:text-rose-500 transition-colors duration-200" data-section="zaver">Závěr</a>
-                </div>
+    <header>
+        <h1>Project "Transparent Society"</h1>
+        <div class="subtitle">International Court Debate (CZ 🤝 AT)</div>
+    </header>
 
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 p-2">
-                        <i data-lucide="menu" class="h-6 w-6" id="menu-icon"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#uvod" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Úvod</a>
-                <a href="#abstrakt" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Abstrakt</a>
-                <a href="#obecne" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Obecné info</a>
-                <a href="#pravo" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Právní rámec</a>
-                <a href="#argumenty" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Argumenty</a>
-                <a href="#metodika" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Metodika</a>
-                <a href="#vysledky" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Výsledky</a>
-                <a href="#zaver" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:text-rose-600 hover:bg-slate-50" onclick="closeMenu()">Závěr</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="uvod" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto flex flex-col items-center text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100 text-rose-800 text-sm font-semibold mb-8">
-            <i data-lucide="award" class="h-4 w-4"></i>
-            Obor 17: Filozofie, politologie a ostatní humanitní vědy
-        </div>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
-            Ústavní limity zákazu potratu
-            <span class="block text-rose-600 mt-4 text-2xl md:text-3xl lg:text-4xl">Je v České republice možné interrupce zakázat?</span>
-        </h1>
-        <p class="text-xl text-slate-600 max-w-2xl mb-10">
-            Téma interrupce patří mezi zásadní společenské otázky dotýkající se lidských práv, zdravotní péče i osobní svobody. Cílem práce je zmapovat aktuální postoje veřejnosti a analyzovat právní úpravu.
-        </p>
-        
-        <div class="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 w-full max-w-4xl text-left">
-            <div class="p-6 bg-white rounded-xl shadow-sm border border-slate-100">
-                <div class="text-sm text-slate-500 font-medium uppercase tracking-wider mb-1">Autor</div>
-                <div class="font-bold text-lg text-slate-900">Filip Trtilek</div>
-                <div class="text-slate-600 text-sm mt-1">Gymnázium T. G. Masaryka Zastávka, příspěvková organizace</div>
-            </div>
-            <div class="p-6 bg-white rounded-xl shadow-sm border border-slate-100">
-                <div class="text-sm text-slate-500 font-medium uppercase tracking-wider mb-1">Respondenti</div>
-                <div class="font-bold text-lg text-slate-900">152</div>
-                <div class="text-slate-600">Účastníků průzkumu</div>
-            </div>
-            <div class="p-6 bg-white rounded-xl shadow-sm border border-slate-100">
-                <div class="text-sm text-slate-500 font-medium uppercase tracking-wider mb-1">Rok</div>
-                <div class="font-bold text-lg text-slate-900">2026</div>
-                <div class="text-slate-600">48. ročník SOČ</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Abstract Section -->
-    <section id="abstrakt" class="py-20 bg-white border-y border-slate-200">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="p-3 bg-indigo-100 rounded-lg text-indigo-600">
-                    <i data-lucide="book-open" class="h-6 w-6"></i>
-                </div>
-                <h2 class="text-3xl font-bold text-slate-900">Úvod a motivace</h2>
-            </div>
-            <div class="prose prose-lg text-slate-600 text-justify max-w-none leading-relaxed">
-                <p class="mb-4">
-                    Téma interrupce patří mezi zásadní společenské otázky, které se dotýkají lidských práv, zdravotní péče i osobní svobody. Přestože jde o citlivé a často polarizující téma, je důležité o něm vést otevřenou, věcnou a respektující diskusi. Právě informovanost a porozumění jsou klíčem k odpovědnému veřejnému dialogu.
-                </p>
-                <p class="mb-4">
-                    Jedním z hlavních důvodů, proč se tématem interrupce zabývat, je ochrana reprodukčních práv žen. Možnost rozhodovat o vlastním těle patří mezi základní principy moderní demokratické společnosti. Interrupce se často týká žen, které se ocitly v náročné životní situaci – ať už ze zdravotních, sociálních nebo osobních důvodů.
-                </p>
-                <blockquote class="border-l-4 border-rose-500 pl-4 italic my-6 bg-slate-50 p-4 rounded-r-lg">
-                    "Za každým rozhodnutím o interrupci stojí konkrétní životní příběh. Zabývat se tímto tématem znamená podporovat empatii, toleranci a respekt."
-                </blockquote>
-            </div>
-        </div>
-    </section>
-
-    <!-- General Info Section -->
-    <section id="obecne" class="py-20 bg-slate-50 border-y border-slate-200">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="p-3 bg-teal-100 rounded-lg text-teal-600">
-                    <i data-lucide="info" class="h-6 w-6"></i>
-                </div>
-                <h2 class="text-3xl font-bold text-slate-900">Obecné informace o interrupci</h2>
-            </div>
-            <div class="prose prose-lg text-slate-600 text-justify max-w-none leading-relaxed">
-                <p class="mb-4">
-                    Interrupce, neboli umělé přerušení těhotenství, je úmyslné ukončení těhotenství pomocí medikace nebo chirurgického zákroku. Při interrupci je z těla ženy vypuzeno nebo odstraněno lidské embryo či plod. Zákrok se nejčastěji provádí v raném stádiu těhotenství, aby se snížilo riziko bolesti a zdravotních komplikací.
-                </p>
-                <p class="mb-4">
-                    Existují dva hlavní způsoby provedení interrupce: farmakologický (chemický) a chirurgický. Farmakologickou metodou lze těhotenství ukončit pouze do osmého týdne. Ženě jsou podána abortiva, která způsobí usmrcení a vypuzení plodu. Od roku 2014 je v České republice dostupná tzv. potratová pilulka, která je k tělu ženy šetrnější než chirurgický zákrok. Pilulku mohou předepsat pouze zdravotnická zařízení s lůžkovou péčí a po jejím užití musí žena zůstat alespoň jednu hodinu pod lékařským dohledem. V případě neúspěchu této metody se přistupuje k chirurgickému zákroku.
-                </p>
-                <p class="mb-4">
-                    Nejčastější metodou umělého přerušení těhotenství v ČR je chirurgická interrupce. Její nejšetrnější formou je tzv. miniinterrupce, která se provádí do osmého týdne těhotenství pomocí vakuové aspirace po rozšíření děložního hrdla. V roce 2015 tvořily miniinterrupce přibližně 40 % všech potratů v ČR. Od devátého týdne těhotenství se používají také potratové kleště, přičemž žena musí být obvykle alespoň jeden den hospitalizována.
-                </p>
-                <p>
-                    Pozdní interrupce jsou vzácné, protože představují zvýšené zdravotní riziko pro těhotnou ženu. Podle české legislativy je možné provést interrupci po dvanáctém týdnu pouze ze závažných zdravotních důvodů, například při ohrožení života matky nebo při vážném poškození či neživotaschopnosti plodu. Velmi pozdní interrupce se provádějí buď vypuzením plodu po rozšíření děložního hrdla, nebo chirurgicky způsobem podobným císařskému řezu.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Legal Framework Section -->
-    <section id="pravo" class="py-20 bg-white border-b border-slate-200">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="p-3 bg-amber-100 rounded-lg text-amber-600">
-                    <i data-lucide="book" class="h-6 w-6"></i>
-                </div>
-                <h2 class="text-3xl font-bold text-slate-900">Právní rámec interrupcí</h2>
-            </div>
-            <div class="prose prose-lg text-slate-600 text-justify max-w-none leading-relaxed">
-                <p class="mb-4">
-                    Právní úprava interrupcí v České republice vychází z kombinace zákonné regulace, trestněprávní ochrany těhotenství a ústavních i mezinárodních záruk základních práv. Český právní řád neformuluje výslovné „základní právo na interrupci“, nicméně vytváří relativně liberální rámec, který umožňuje ženě o ukončení těhotenství rozhodnout a současně vyvažuje ochranu prenatálního života.
-                </p>
-                <p class="mb-4">
-                    Základním předpisem je zákon o umělém přerušení těhotenství, který rozlišuje dva hlavní typy interrupcí. Prvním je interrupce „na žádost ženy“, kterou lze provést do 12. týdne těhotenství bez nutnosti uvádět důvody, pokud neexistují zdravotní překážky. Druhým typem je interrupce „ze zdravotních důvodů“, která je přípustná i po 12. týdnu těhotenství, jestliže je prokázáno ohrožení života či zdraví ženy nebo závažné poškození plodu. Zákon tak vyjadřuje respekt k autonomii ženy v rané fázi těhotenství a zároveň umožňuje zásah i v pozdějších fázích, pokud to vyžadují vážné zdravotní okolnosti.
-                </p>
-                <p>
-                    Ústavní rámec tvoří především <strong>Listina základních práv a svobod</strong>. Klíčové je ustanovení o právu na život, které výslovně uvádí, že lidský život je hoden ochrany již před narozením. Tato formulace však neznamená, že by plod měl stejná základní práva jako narozený člověk; konkrétní rozsah ochrany je ponechán zákonodárci. Vedle toho Listina chrání nedotknutelnost osoby, osobní svobodu a právo na soukromý a rodinný život. Rozhodnutí o pokračování či ukončení těhotenství patří mezi nejintimnější zásahy do soukromí ženy a ústavní doktrína zdůrazňuje, že reprodukční autonomie je součástí práva na tělesnou integritu. Významnou roli hraje také právo na ochranu zdraví a zvláštní ochrana ženy v těhotenství, z nichž plyne povinnost státu zajistit zdravotně bezpečné podmínky a neohrožovat zdraví ženy nepřiměřenými zásahy.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Arguments Section -->
-    <section id="argumenty" class="py-20 bg-slate-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center gap-4 mb-12">
-                <div class="p-3 bg-purple-100 rounded-lg text-purple-600">
-                    <i data-lucide="scale" class="h-6 w-6"></i>
-                </div>
-                <h2 class="text-3xl font-bold text-slate-900">Argumentační roviny</h2>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Pro-Life -->
-                <div class="bg-white rounded-2xl p-8 shadow-sm border-t-4 border-blue-500">
-                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <i data-lucide="heart" class="h-5 w-5 text-blue-500"></i>
-                        Zástupci Pro-life
-                    </h3>
-                    <p class="text-slate-600 mb-4 text-justify">
-                        Odpůrci interrupcí argumentují tím, že člověk je člověkem od početí a že již první oplozená lidská buňka je existující lidský jedinec s právem na život. Člověka definuje od počátku úplný soubor genů, nikoliv tvar a velikost těla.
-                    </p>
-                    <ul class="space-y-2 text-slate-700">
-                        <li class="flex items-start gap-2">
-                            <div class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0"></div>
-                            <span>Život začíná početím (koncepcí).</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <div class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0"></div>
-                            <span>Interrupce je považována za neoprávněné ukončení života.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <div class="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0"></div>
-                            <span>Apel na lidskou odpovědnost a zákonnou ochranu plodu.</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Pro-Choice -->
-                <div class="bg-white rounded-2xl p-8 shadow-sm border-t-4 border-rose-500">
-                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <i data-lucide="brain" class="h-5 w-5 text-rose-500"></i>
-                        Zástupci Pro-choice
-                    </h3>
-                    <p class="text-slate-600 mb-4 text-justify">
-                        Hnutí pro-choice prosazuje právo na legální přístup k interrupcím. Zdůrazňují společenský význam možnosti svobodné volby a práva rozhodovat o svém životě a těle. Přinucení ženy přijmout nechtěné těhotenství je vnímáno jako omezení svobody.
-                    </p>
-                    <ul class="space-y-2 text-slate-700">
-                        <li class="flex items-start gap-2">
-                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500 mt-2 flex-shrink-0"></div>
-                            <span>Právo ženy rozhodovat o vlastním těle.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500 mt-2 flex-shrink-0"></div>
-                            <span>Prevence nelegálních a nebezpečných zákroků.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500 mt-2 flex-shrink-0"></div>
-                            <span>Různé názory na to, kdy plod získává status člověka (např. mozková aktivita, životaschopnost).</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Methodology -->
-    <section id="metodika" class="py-20 bg-white border-y border-slate-200">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-           <div class="flex items-center gap-4 mb-8">
-            <div class="p-3 bg-emerald-100 rounded-lg text-emerald-600">
-                <i data-lucide="microscope" class="h-6 w-6"></i>
-            </div>
-            <h2 class="text-3xl font-bold text-slate-900">Metodika výzkumu</h2>
-          </div>
-          <div class="bg-slate-50 rounded-2xl p-8 border border-slate-200">
-            <p class="text-slate-700 mb-6 text-lg">
-              Výzkum veřejného mínění byl zaměřen na zjištění postojů obyvatel České republiky, přičemž hlavní pozornost byla věnována respondentům z <strong>Jihomoravského kraje</strong>.
-            </p>
-            <div class="grid sm:grid-cols-3 gap-6">
-              <div class="bg-white p-5 rounded-lg shadow-sm border border-slate-100 text-center">
-                <div class="text-4xl font-bold text-emerald-600 mb-1">152</div>
-                <div class="text-slate-600 font-medium">Respondentů</div>
-              </div>
-              <div class="bg-white p-5 rounded-lg shadow-sm border border-slate-100 text-center">
-                <div class="text-xl font-bold text-emerald-600 mb-1 mt-2">Google Forms</div>
-                <div class="text-slate-600 font-medium">Metoda sběru</div>
-              </div>
-              <div class="bg-white p-5 rounded-lg shadow-sm border border-slate-100 text-center">
-                <div class="text-xl font-bold text-emerald-600 mb-1 mt-2">16-44 let</div>
-                <div class="text-slate-600 font-medium">Převažující věk</div>
-              </div>
-            </div>
-            <p class="text-slate-500 mt-6 text-sm italic">
-              * Dotazník obsahoval převážně uzavřené otázky. Výsledky reflektují především regionální postoje, ale naznačují i obecnější trendy.
-            </p>
-          </div>
-        </div>
-    </section>
-
-    <!-- Results Section -->
-    <section id="vysledky" class="py-20 bg-slate-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center gap-4 mb-12">
-                <div class="p-3 bg-orange-100 rounded-lg text-orange-600">
-                    <i data-lucide="bar-chart-3" class="h-6 w-6"></i>
-                </div>
-                <h2 class="text-3xl font-bold text-slate-900">Výsledky výzkumu</h2>
-            </div>
-
-            <!-- BLOK 1: Demografie -->
-            <div class="mb-12">
-                <h3 class="text-xl font-bold text-slate-800 mb-6 border-b border-slate-200 pb-2">1. Demografie respondentů</h3>
-                <div class="grid lg:grid-cols-3 gap-6">
-                    <!-- Pohlaví -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h4 class="font-bold text-slate-900 mb-4">Pohlaví</h4>
-                        <div class="space-y-4 mb-4">
-                            <div>
-                                <div class="flex justify-between text-sm font-medium text-slate-700 mb-1"><span>Žena</span><span>59.2%</span></div>
-                                <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-rose-400 h-3 rounded-full" style="width: 59.2%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm font-medium text-slate-700 mb-1"><span>Muž</span><span>38.8%</span></div>
-                                <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-blue-400 h-3 rounded-full" style="width: 38.8%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm font-medium text-slate-700 mb-1"><span>Jiné</span><span>1.9%</span></div>
-                                <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-slate-400 h-3 rounded-full" style="width: 1.9%"></div></div>
-                            </div>
-                        </div>
-                        <p class="text-xs text-slate-500 text-justify">Dotazník vyplnilo mnohem více žen. Kolonku „jiné“ zaklikli pouze tři lidi (necelé 2 % ze všech respondentů), což zohledňuje ty, kteří se neidentifikují ani jako žena, ani jako muž.</p>
-                    </div>
-
-                    <!-- Věk a Vzdělání (Text Card) -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h4 class="font-bold text-slate-900 mb-4">Věk a Vzdělání</h4>
-                        <ul class="space-y-3 text-sm text-slate-600 text-justify">
-                            <li><strong class="text-slate-800">Věk:</strong> Nejvíce respondentů spadá do věkového období 16–18 let a 19–44 let, což je ideální kategorie pro tento výzkum (nejrizikovější z hlediska neplánovaného početí). Skupinu 0–15 let zvolilo pouze 6,6 % a 65+ jen 2 %.</li>
-                            <li><strong class="text-slate-800">Vzdělání:</strong> Nejvíce respondentů má základní vzdělání (dáno nižším věkem respondentů). Poměrně dost respondentů má i vysokoškolské vzdělání. Lidé s vyšším vzděláním mohou interrupci chápat šířeji jako otázku veřejného zdraví. Bez vzdělání (1,3 %) a VOŠ (1,3 %) tvořili minimum.</li>
-                        </ul>
-                    </div>
-
-                    <!-- Náboženství -->
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <h4 class="font-bold text-slate-900 mb-4">Náboženské vyznání</h4>
-                        <div class="space-y-4 mb-4">
-                            <div>
-                                <div class="flex justify-between text-sm font-medium text-slate-700 mb-1"><span>Nehlásí se k žádné víře</span><span>74.3%</span></div>
-                                <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-slate-500 h-3 rounded-full" style="width: 74.3%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm font-medium text-slate-700 mb-1"><span>Hlásí se k náboženství/víře</span><span>25.7%</span></div>
-                                <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-purple-400 h-3 rounded-full" style="width: 25.7%"></div></div>
-                            </div>
-                        </div>
-                        <p class="text-xs text-slate-500 text-justify">Většina tázaných se nehlásí k žádnému náboženství. Z vlastní hypotézy lze usoudit, že lidé s hlubší náboženskou orientací mohou vnímat interrupci primárně jako morálně problematickou.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BLOK 2: Obecné postoje -->
-            <div class="mb-12">
-                <h3 class="text-xl font-bold text-slate-800 mb-6 border-b border-slate-200 pb-2">2. Obecné postoje a znalosti</h3>
-                <div class="grid lg:grid-cols-2 gap-8">
-                    
-                    <!-- Chart: Znalost pojmu -->
-                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-lg font-bold text-slate-900 mb-6">Znalost pojmu "Interrupce"</h4>
-                            <div class="space-y-5 mb-6">
-                                <div>
-                                    <div class="flex justify-between text-sm font-medium text-slate-700 mb-1"><span>Ano, přesně vím co znamená (71.1%)</span></div>
-                                    <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-emerald-500 h-3 rounded-full" style="width: 71.1%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-sm font-medium text-slate-700 mb-1"><span>Slyšel/a jsem o tom (18.4%)</span></div>
-                                    <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-amber-400 h-3 rounded-full" style="width: 18.4%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-sm font-medium text-slate-700 mb-1"><span>Nevím / Neznám (10.5%)</span></div>
-                                    <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-slate-400 h-3 rounded-full" style="width: 10.5%"></div></div>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-slate-600 text-justify">
-                            Znalost pojmu interrupce je základním předpokladem pro informované rozhodování. Z výsledků vyplývá, že většina respondentů pojem dobře zná. Pouze menší část (10,5 %) se s tímto pojmem dosud nesetkala nebo jej nezná.
-                        </p>
-                    </div>
-
-                    <!-- Chart: Právo ženy rozhodnout -->
-                    <div class="bg-rose-600 text-white p-8 rounded-2xl shadow-lg flex flex-col justify-between">
-                        <div class="text-center">
-                            <h4 class="text-xl font-medium text-rose-100 mb-2">Měla by žena mít právo rozhodnout?</h4>
-                            <div class="text-6xl font-extrabold mb-4">90.1%</div>
-                            <div class="flex justify-center gap-4 text-sm font-medium opacity-90 mb-6">
-                                <span class="bg-white/20 px-3 py-1 rounded-full">5.3% Nesouhlasí</span>
-                                <span class="bg-white/20 px-3 py-1 rounded-full">4.6% Neví</span>
-                            </div>
-                        </div>
-                        <p class="text-sm text-rose-100 text-justify">
-                            Drtivá většina respondentů (90,1 %) souhlasí s tím, aby žena měla právo rozhodnout o přerušení těhotenství. Pro část společnosti představuje toto právo důležitý prvek svobodného rozhodování, zatímco malá menšina (5,3 %) jej vnímá jako eticky sporné a nesouhlasí.
-                        </p>
-                    </div>
-
-                    <!-- Chart: Obecný postoj -->
-                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                        <h4 class="text-lg font-bold text-slate-900 mb-4">Obecný postoj k umělým potratům</h4>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-blue-600 font-bold text-xl">>90%</div>
-                            <p class="text-sm text-slate-700 font-medium">Souhlasí s právem na interrupci (buď za všech okolností, nebo z řádných zdravotních/psychických důvodů).</p>
-                        </div>
-                        <div class="space-y-3 mt-6 pt-6 border-t border-slate-100">
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">Proti právu na interrupci</span>
-                                <span class="font-bold text-rose-600">3.9% (6 osob)</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">Nevytvořili si názor</span>
-                                <span class="font-bold text-slate-500">2.0% (3 osoby)</span>
-                            </div>
-                        </div>
-                        <p class="text-sm text-slate-600 mt-6 text-justify">Tato otázka vystihuje celkový postoj respondentů k danému tématu. Velká většina stojí za tím, že by právo mělo existovat vždy, dílčí část to podmiňuje řádným důvodem.</p>
-                    </div>
-
-                    <!-- Chart: Časové omezení -->
-                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                        <h4 class="text-lg font-bold text-slate-900 mb-6">Časové omezení zákonem</h4>
-                        <div class="space-y-4 mb-6">
-                            <div>
-                                <div class="flex justify-between text-xs font-medium text-slate-700 mb-1"><span>Souhlasí, ale záleží na situaci (59.2%)</span></div>
-                                <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-orange-400 h-2 rounded-full" style="width: 59.2%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-medium text-slate-700 mb-1"><span>Jednoznačně by mělo být omezeno (25.0%)</span></div>
-                                <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-red-500 h-2 rounded-full" style="width: 25.0%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-medium text-slate-700 mb-1"><span>Nemělo by být omezeno vůbec (7.2%)</span></div>
-                                <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-emerald-400 h-2 rounded-full" style="width: 7.2%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-medium text-slate-700 mb-1"><span>Neví / Bez názoru (7.2%)</span></div>
-                                <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-slate-300 h-2 rounded-full" style="width: 7.2%"></div></div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-slate-600 text-justify">
-                            Otázka zákonného omezení je často spojována s ochranou plodu. Většina respondentů se domnívá, že by omezení mělo existovat (celkem přes 84 %), avšak pro 59,2 % z nich velmi záleží na konkrétní situaci.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BLOK 3: Specifické situace -->
-            <div>
-                <h3 class="text-xl font-bold text-slate-800 mb-6 border-b border-slate-200 pb-2">3. Rozhodování v krizových situacích a vlivy</h3>
-                <div class="grid lg:grid-cols-2 gap-8">
-                    <!-- Chart: Postoj v krizové situaci -->
-                    <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-lg font-bold text-slate-900 mb-2">Rozhodnutí z pohledu ženy v životní krizi</h4>
-                            <p class="text-slate-500 mb-8 text-sm">"Rozhodli byste se pro potrat ve finanční, psychické či jiné krizi?"</p>
-                            
-                            <div class="mt-2 mb-8">
-                                <div class="h-56 flex items-end justify-around gap-4 px-2 border-b border-slate-200">
-                                    <!-- Bar 1 -->
-                                    <div class="w-full max-w-[120px] h-full flex flex-col justify-end items-center group cursor-pointer relative">
-                                        <div class="mb-2 font-bold text-rose-600 text-lg transition-transform group-hover:-translate-y-1">54.6%</div>
-                                        <div class="w-full bg-gradient-to-t from-rose-600 to-rose-400 rounded-t-lg transition-all group-hover:opacity-90 shadow-md" style="height: 54.6%"></div>
-                                    </div>
-                                    <!-- Bar 2 -->
-                                    <div class="w-full max-w-[120px] h-full flex flex-col justify-end items-center group cursor-pointer relative">
-                                        <div class="mb-2 font-bold text-slate-500 text-lg transition-transform group-hover:-translate-y-1">27.6%</div>
-                                        <div class="w-full bg-gradient-to-t from-slate-400 to-slate-300 rounded-t-lg transition-all group-hover:opacity-90" style="height: 27.6%"></div>
-                                    </div>
-                                    <!-- Bar 3 -->
-                                    <div class="w-full max-w-[120px] h-full flex flex-col justify-end items-center group cursor-pointer relative">
-                                        <div class="mb-2 font-bold text-blue-600 text-lg transition-transform group-hover:-translate-y-1">17.8%</div>
-                                        <div class="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all group-hover:opacity-90 shadow-md" style="height: 17.8%"></div>
-                                    </div>
-                                </div>
-                                <!-- Labels -->
-                                <div class="flex justify-around gap-4 px-2 mt-4">
-                                    <div class="w-full max-w-[120px] text-center text-sm font-medium text-slate-700 leading-tight">Podstoupit <span class="block text-xs text-slate-500 font-normal mt-1">(řešení)</span></div>
-                                    <div class="w-full max-w-[120px] text-center text-sm font-medium text-slate-700 leading-tight">Nerozhodnost <span class="block text-xs text-slate-500 font-normal mt-1">(neví)</span></div>
-                                    <div class="w-full max-w-[120px] text-center text-sm font-medium text-slate-700 leading-tight">Nechat dítě <span class="block text-xs text-slate-500 font-normal mt-1">(navzdory krizi)</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-slate-600 text-justify">
-                            Rozhodnutí často závisí na osobních a ekonomických podmínkách. Většina (54,6 %) by v situaci vážné krize považovala interrupci za vhodné řešení. Významná část populace (27,6 %) však v této citlivé otázce zůstává nerozhodná.
-                        </p>
-                    </div>
-
-                    <!-- Chart: Vliv okolí na názor -->
-                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-xl font-bold text-slate-900 mb-6">Ovlivňuje váš názor na potraty okolí?</h4>
-                            <div class="space-y-6 mb-8">
-                                <div>
-                                    <div class="flex justify-between mb-1 text-sm font-medium text-slate-700">
-                                        <span>Ne, tvořím si vlastní pohled</span>
-                                        <span class="font-bold text-emerald-600">88.8%</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 rounded-full h-3">
-                                        <div class="bg-emerald-500 h-3 rounded-full" style="width: 88.8%"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between mb-1 text-sm font-medium text-slate-700">
-                                        <span>Ano, můj názor je ovlivněn okolím</span>
-                                        <span class="font-bold text-rose-500">11.2%</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 rounded-full h-3">
-                                        <div class="bg-rose-400 h-3 rounded-full" style="width: 11.2%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-slate-600 text-justify">
-                            Drtivá většina respondentů uvedla, že si udělali svůj vlastní pohled na interrupce a nepodléhají vlivu svého okolí. Názor menšiny (11,2 % respondentů) je naopak něčím ovlivněn, jak je podrobně zobrazeno v grafu vedle.
-                        </p>
-                    </div>
-
-                    <!-- Chart: Co ovlivňuje názor -->
-                    <div class="bg-slate-900 text-slate-300 p-8 rounded-2xl shadow-inner flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-xl font-bold text-white mb-2">Co konkrétně váš názor ovlivňuje?</h4>
-                            <p class="mb-8 text-sm text-slate-400">Tázáni byli pouze ti, jejichž názor je ovlivněn (11,2 %). Bylo možné vybrat více možností.</p>
-                            
-                            <div class="space-y-5 mb-6">
-                                <div>
-                                    <div class="flex justify-between mb-1 text-sm"><span class="font-medium text-white">Etické faktory (vnímání života)</span><span class="font-bold text-rose-400">88.9%</span></div>
-                                    <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-gradient-to-r from-rose-500 to-purple-500 h-2 rounded-full" style="width: 88.9%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between mb-1 text-sm"><span class="font-medium text-white">Rodina a přátelé</span><span class="font-bold text-rose-400">38.9%</span></div>
-                                    <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-gradient-to-r from-rose-500 to-purple-500 h-2 rounded-full" style="width: 38.9%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between mb-1 text-sm"><span class="font-medium text-white">Vzdělání (škola)</span><span class="font-bold text-rose-400">33.3%</span></div>
-                                    <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-gradient-to-r from-rose-500 to-purple-500 h-2 rounded-full" style="width: 33.3%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between mb-1 text-sm"><span class="font-medium text-white">Osobní zkušenost</span><span class="font-bold text-rose-400">11.1%</span></div>
-                                    <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-gradient-to-r from-rose-500 to-purple-500 h-2 rounded-full" style="width: 11.1%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between mb-1 text-sm"><span class="font-medium text-white">Náboženství</span><span class="font-bold text-rose-400">11.1%</span></div>
-                                    <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-gradient-to-r from-rose-500 to-purple-500 h-2 rounded-full" style="width: 11.1%"></div></div>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-slate-400 text-justify">
-                            Jak je vidět, zdaleka nejčastějším faktorem u této menšiny je jejich vlastní vnímání lidského života a etiky (88,9 %). Menší, přesto významný vliv má sociální bublina (rodina/přátelé) a vzdělání.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Conclusion -->
-    <section id="zaver" class="py-20 bg-white border-t border-slate-200">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-           <div class="inline-block p-3 bg-rose-100 rounded-full text-rose-600 mb-6">
-             <i data-lucide="target" class="h-8 w-8"></i>
-           </div>
-           <h2 class="text-3xl font-bold text-slate-900 mb-8">Závěr</h2>
-           <p class="text-xl text-slate-600 mb-12 leading-relaxed text-justify">
-             Průzkum ukázal, že v české společnosti, konkrétně mezi respondenty z Jihomoravského kraje, převládá <strong>liberální postoj</strong> k interrupcím. Drtivá většina (přes 90 %) podporuje právo ženy na volbu. Zároveň však respondenti vnímají etickou složitost problému – většina souhlasí s určitým časovým omezením zákroku a jako hlavní faktor formující jejich názor uvádějí etické vnímání lidského života.
-             <br /><br />
-             Výzkum tak přispívá k lepšímu porozumění společenským postojům k reprodukčním právům a potvrzuje, že ačkoliv je téma citlivé, veřejnost preferuje možnost svobodné volby v rámci zákonných mantinelů.
-           </p>
-           
-           <div class="bg-slate-50 p-8 rounded-2xl shadow-sm border border-slate-200 inline-block text-left w-full max-w-2xl">
-             <div class="flex items-center gap-3 mb-6">
-                <i data-lucide="mail" class="h-6 w-6 text-rose-600"></i>
-                <h3 class="text-xl font-bold text-slate-900">Kontakt</h3>
-             </div>
-             <div class="grid sm:grid-cols-2 gap-6">
-               <div>
-                 <div class="text-sm text-slate-500 mb-1">Autor</div>
-                 <div class="font-medium text-slate-800">Filip Trtilek</div>
-                 <a href="mailto:trtilekfilip@seznam.cz" class="text-rose-600 hover:underline text-sm">trtilekfilip@seznam.cz</a>
-               </div>
-               <div>
-                 <div class="text-sm text-slate-500 mb-1">Konzultant</div>
-                 <div class="font-medium text-slate-800">Mgr. Martin Dojiva</div>
-                 <a href="mailto:dojiva@gzastavka.cz" class="text-rose-600 hover:underline text-sm">dojiva@gzastavka.cz</a>
-               </div>
-             </div>
-           </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12 text-center">
-        <div class="max-w-6xl mx-auto px-4">
-            <p class="mb-4 font-semibold text-slate-300">© 2026 Filip Trtilek.</p>
-            <p class="text-sm text-slate-500 max-w-2xl mx-auto">
-                Stránky čerpají ze středoškolské odborné činnosti Filipa Trtilka ze stejnojmenné práce 
-                <br>
-                <span class="text-slate-400 italic">"Ústavní limity zákazu potratu, je v České republice možné interrupce zakázat?"</span>
-            </p>
-        </div>
-    </footer>
-
-    <!-- Logic Script -->
-    <script>
-        // Initialize Icons
-        lucide.createIcons();
-
-        // Mobile Menu Logic
-        const mobileBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuIcon = document.getElementById('menu-icon');
-        let isMenuOpen = false;
-
-        mobileBtn.addEventListener('click', () => {
-            isMenuOpen = !isMenuOpen;
-            if (isMenuOpen) {
-                mobileMenu.classList.remove('hidden');
-                // Could change icon here if desired
-            } else {
-                mobileMenu.classList.add('hidden');
-            }
-        });
-
-        function closeMenu() {
-            isMenuOpen = false;
-            mobileMenu.classList.add('hidden');
-        }
-
-        // Active Scroll Spy Logic
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
+    <!-- WARM-UP SURVEY VIEW -->
+    <div id="survey-view">
+        <div class="survey-card">
+            <div class="question-counter" id="q-counter">Question 1 / 6</div>
             
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
+            <h2 class="survey-question" id="q-title">Should cash be completely banned?</h2>
+            
+            <p class="survey-context" id="q-desc">
+                By replacing cash entirely with trackable digital payments, the government could instantly monitor all purchases. This would drastically limit illegal trade, weapons, drugs, tax evasion, and prostitution.
+            </p>
 
-            navLinks.forEach(link => {
-                link.classList.remove('text-rose-600', 'font-semibold');
-                link.classList.add('text-slate-600');
+            <p style="color: var(--accent-blue); font-weight: bold; margin-bottom: 1.5rem; font-size: 1.1rem;">
+                📝 Write down your answer (YES or NO) on a piece of paper. Based on your final count, you will be assigned to a team!
+            </p>
+
+            <div class="survey-votes">
+                <div class="vote-box vote-yes">
+                    YES
+                </div>
+                <div class="vote-box vote-no">
+                    NO
+                </div>
+            </div>
+
+            <div class="survey-controls">
+                <button class="btn-large" id="btn-next-q" onclick="nextQuestion()">Next Question ➡️</button>
+                <button class="btn-large btn-finish" id="btn-finish-q" onclick="startDebate()">Assign Teams & Start Debate ⚖️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DEBATE VIEW (Hidden by default) -->
+    <div id="debate-view" class="hidden-view">
+        <div class="main-container">
+            
+            <!-- LEVÁ STRANA -->
+            <div class="rules-section">
                 
-                if (link.getAttribute('data-section') === current) {
-                    link.classList.remove('text-slate-600');
-                    link.classList.add('text-rose-600', 'font-semibold');
-                }
-            });
-        });
+                <div class="card scenario-box">
+                    <h2>The Scenario</h2>
+                    <p style="font-size: 1.1rem; line-height: 1.6;">
+                        The government proposes the implementation of blanket AI monitoring of the entire population. Street cameras with facial recognition, location tracking, and online activity analysis. 
+                        <strong>The Promise:</strong> Zero crime, elimination of bureaucracy, and a 4-day work week (thanks to algorithmic efficiency).
+                    </p>
 
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+                    <div class="scenario-tags">
+                        <span class="scenario-tag">Cashless Society</span>
+                        <span class="scenario-tag">Chat Control</span>
+                        <span class="scenario-tag">AI Street Scanning</span>
+                        <span class="scenario-tag">Biometric Tracking</span>
+                        <span class="scenario-tag">Predictive Policing</span>
+                    </div>
+                    
+                    <div class="teams">
+                        <div class="team-a">TEAM A: PRO-monitoring</div>
+                        <div class="team-b">TEAM B: ANTI-monitoring</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Team Role Division (Everyone has a task!)</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Divide your 13 members into these 4 units. During preparation, each group works on their specific task.</p>
+                    
+                    <div class="roles-grid">
+                        <div class="role-box">
+                            <h3>🎙️ Opening Speakers (3 students)</h3>
+                            <p>Prepare and present the best, bulletproof 2 minutes to kick off the debate. Define the core argument of your side.</p>
+                        </div>
+                        <div class="role-box">
+                            <h3>⚔️ Attackers (4 students)</h3>
+                            <p>You don't care about defense! Think of the most vicious and uncomfortable questions targeting the opposing team's weaknesses for the cross-examination phase.</p>
+                        </div>
+                        <div class="role-box">
+                            <h3>🛡️ Defenders (3 students)</h3>
+                            <p>Anticipate the opponent's attacks. What will they ask? Prepare an argumentative defense so you can strike back immediately during the cross-examination.</p>
+                        </div>
+                        <div class="role-box">
+                            <h3>📜 Closing Speakers (3 students)</h3>
+                            <p>Stay silent during the debate and take notes on what is being said. At the end, you have 1.5 minutes for a final emotional and rational summary.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PRAVÁ STRANA: ČASOVAČ A OVLÁDÁNÍ -->
+            <div class="timer-section">
+                <div id="phase-title">Phase Preparation</div>
+                <div id="phase-desc">Waiting for the debate to start...</div>
+                
+                <div id="timer">00:00</div>
+                
+                <div class="btn-controls">
+                    <button id="nextPhaseBtn" onclick="nextPhase()">Start Next Phase</button>
+                    <button id="playPauseBtn" onclick="toggleTimer()">Start / Pause</button>
+                </div>
+
+                <div class="phase-list" id="phaseList">
+                    <!-- Fáze se generují přes JS -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- WARM-UP SURVEY LOGIC ---
+        const questions = [
+            {
+                title: "Should cash be completely banned?",
+                desc: "By replacing cash entirely with trackable digital payments, the government could instantly monitor all purchases. This would drastically limit illegal trade, weapons, drugs, tax evasion, and prostitution."
+            },
+            {
+                title: "Do you support 'Chat Control'?",
+                desc: "Should the government have algorithmic access to read private messages (WhatsApp, Messenger, SMS)? The sole purpose is to automatically detect and prevent planned terrorist attacks and child abuse."
+            },
+            {
+                title: "Should all streets have AI Facial Recognition?",
+                desc: "Public spaces would be covered by AI cameras to track everyone's movement for safety. If the system fails to recognize a person, it instantly alerts nearby police units to check their identity."
+            },
+            {
+                title: "Should the state collect everyone's DNA?",
+                desc: "A mandatory DNA database at birth. It would allow police to solve almost every violent crime instantly and help doctors predict severe genetic diseases before they happen."
+            },
+            {
+                title: "Would you accept 100% AI monitoring at work?",
+                desc: "Your employer tracks your eye movement, keystrokes, and breaks via webcam to ensure maximum productivity. In exchange, society guarantees a 4-day work week and higher salaries."
+            },
+            {
+                title: "Do you support Predictive Policing?",
+                desc: "Should police be allowed to detain an individual based purely on an AI algorithm predicting that they are 95% likely to commit a violent crime in the next 24 hours?"
+            }
+        ];
+
+        let currentQIndex = 0;
+
+        function loadQuestion() {
+            document.getElementById('q-counter').innerText = `Question ${currentQIndex + 1} / ${questions.length}`;
+            document.getElementById('q-title').innerText = questions[currentQIndex].title;
+            document.getElementById('q-desc').innerText = questions[currentQIndex].desc;
+
+            if (currentQIndex === questions.length - 1) {
+                document.getElementById('btn-next-q').style.display = 'none';
+                document.getElementById('btn-finish-q').style.display = 'block';
+            }
         }
+
+        function nextQuestion() {
+            if (currentQIndex < questions.length - 1) {
+                currentQIndex++;
+                loadQuestion();
+            }
+        }
+
+        function startDebate() {
+            document.getElementById('survey-view').classList.add('hidden-view');
+            
+            setTimeout(() => {
+                document.getElementById('survey-view').style.display = 'none';
+                const debateView = document.getElementById('debate-view');
+                debateView.classList.remove('hidden-view');
+            }, 500); // Wait for fade out animation
+        }
+
+        // Initialize first question
+        loadQuestion();
+
+
+        // --- DEBATE TIMER LOGIC ---
+        const phases = [
+            { name: "Team Prep (War Room)", duration: 10 * 60, desc: "Teams divide into roles and prepare their arguments." },
+            { name: "Opening: Team A (PRO)", duration: 2 * 60, desc: "Opening speakers present their main argument (Team A)." },
+            { name: "Opening: Team B (ANTI)", duration: 2 * 60, desc: "Opening speakers present their main argument (Team B)." },
+            { name: "Cross-Examination", duration: 8 * 60, desc: "Attackers ask questions, Defenders answer (Alternating)." },
+            { name: "Closing: Team A (PRO)", duration: 1.5 * 60, desc: "Closing speakers summarize the debate (Team A)." },
+            { name: "Closing: Team B (ANTI)", duration: 1.5 * 60, desc: "Closing speakers summarize the debate (Team B)." },
+            { name: "Teacher's Verdict", duration: 0, desc: "The end. Evaluation of the arguments." }
+        ];
+
+        let currentPhaseIndex = -1;
+        let timeRemaining = 0;
+        let timerInterval = null;
+        let isRunning = false;
+
+        function initPhaseList() {
+            const listEl = document.getElementById('phaseList');
+            listEl.innerHTML = '';
+            phases.forEach((phase, index) => {
+                const min = Math.floor(phase.duration / 60);
+                const sec = phase.duration % 60;
+                const timeStr = phase.duration > 0 ? `${min}:${sec.toString().padStart(2, '0')}` : 'Konec';
+                
+                listEl.innerHTML += `
+                    <div class="phase-item" id="phase-item-${index}">
+                        <span>${phase.name}</span>
+                        <span>${timeStr}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function nextPhase() {
+            currentPhaseIndex++;
+            if (currentPhaseIndex >= phases.length) return;
+
+            clearInterval(timerInterval);
+            isRunning = false;
+            document.getElementById('playPauseBtn').innerText = "Start";
+
+            const phase = phases[currentPhaseIndex];
+            timeRemaining = phase.duration;
+            
+            document.getElementById('phase-title').innerText = phase.name;
+            document.getElementById('phase-desc').innerText = phase.desc;
+            
+            document.querySelectorAll('.phase-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`phase-item-${currentPhaseIndex}`).classList.add('active');
+
+            const titleEl = document.getElementById('phase-title');
+            if (phase.name.includes("Team B")) {
+                titleEl.style.color = "var(--accent-red)";
+            } else {
+                titleEl.style.color = "var(--accent-blue)";
+            }
+
+            updateDisplay();
+            
+            if (currentPhaseIndex === phases.length - 1) {
+                document.getElementById('nextPhaseBtn').style.display = 'none';
+                document.getElementById('playPauseBtn').style.display = 'none';
+            } else {
+                document.getElementById('nextPhaseBtn').innerText = "Skip to Next Phase";
+            }
+        }
+
+        function toggleTimer() {
+            if (currentPhaseIndex === -1) {
+                nextPhase();
+            }
+
+            if (isRunning) {
+                clearInterval(timerInterval);
+                document.getElementById('playPauseBtn').innerText = "Resume";
+            } else {
+                timerInterval = setInterval(() => {
+                    if (timeRemaining > 0) {
+                        timeRemaining--;
+                        updateDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        isRunning = false;
+                        document.getElementById('playPauseBtn').innerText = "Time's Up";
+                    }
+                }, 1000);
+                document.getElementById('playPauseBtn').innerText = "Pause";
+            }
+            isRunning = !isRunning;
+        }
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const display = document.getElementById('timer');
+            
+            display.textContent = 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+
+            if (timeRemaining <= 10 && timeRemaining > 0) {
+                display.classList.add('warning-time');
+            } else {
+                display.classList.remove('warning-time');
+            }
+        }
+
+        initPhaseList();
     </script>
+
 </body>
 </html>
